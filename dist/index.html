@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Montandon × WebLLM</title>
+    <style>body{grid-template-columns:1fr 1fr;height:100vh;margin:0;font:14px/1.4 system-ui,sans-serif;display:grid}section{flex-direction:column;gap:8px;padding:12px;display:flex;overflow:auto}section+section{border-left:1px solid #ddd}h2{margin:0;font-size:16px}.row{flex-wrap:wrap;align-items:center;gap:6px;display:flex}#events li{cursor:pointer;padding:2px 0}#events li:hover{text-decoration:underline}#context{flex:1;min-height:200px;font:12px monospace}#chat{white-space:pre-wrap;border:1px solid #ddd;flex:1;padding:8px;overflow:auto}.user{margin-top:8px;font-weight:700}.status{color:#666;font-size:12px}</style>
+    <script type="module" crossorigin src="./assets/index-G6jBhqlh.js"></script>
+  </head>
+  <body>
+    <section>
+      <div class="row">
+        <h2>1. Pick a Montandon event</h2>
+        <button id="change-token" hidden>Change token</button>
+      </div>
+      <dialog id="token-dialog">
+        <form method="dialog" class="row" style="flex-direction: column; align-items: stretch">
+          <strong>Montandon API token</strong>
+          <span class="status">
+            Get one from IFRC GO → Account → External Connections → "Montandon - Global Crisis Data Bank".
+            It is stored only in this browser.
+          </span>
+          <input id="token" type="password" required autofocus style="min-width: 320px" />
+          <button>Save</button>
+        </form>
+      </dialog>
+      <div class="row">
+        <select id="collection"></select>
+        <input id="from" type="date" /> – <input id="to" type="date" />
+        <input id="title" placeholder="filter title…" />
+        <button id="search">Search</button>
+      </div>
+      <form id="by-id" class="row">
+        <input id="item-id" style="flex: 1" placeholder="or load by id, e.g. gdacs-event-1104124-1" />
+        <button>Load</button>
+      </form>
+      <div id="data-status" class="status"></div>
+      <ul id="events"></ul>
+      <h2>Context sent to the model (editable)</h2>
+      <textarea id="context"></textarea>
+    </section>
+
+    <section>
+      <h2>2. Load a model and ask</h2>
+      <div class="row">
+        <select id="model"></select>
+        <button id="load">Load model</button>
+      </div>
+      <div id="model-status" class="status"></div>
+      <div id="chat"></div>
+      <form id="ask" class="row">
+        <input id="question" style="flex: 1" placeholder="How many people were affected?" disabled />
+        <button disabled>Ask</button>
+      </form>
+    </section>
+  </body>
+</html>
