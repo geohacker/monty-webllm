@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Montandon × WebLLM</title>
+    <style>
+      body { font: 14px/1.4 system-ui, sans-serif; margin: 0; display: grid; grid-template-columns: 1fr 1fr; height: 100vh; }
+      section { padding: 12px; overflow: auto; display: flex; flex-direction: column; gap: 8px; }
+      section + section { border-left: 1px solid #ddd; }
+      h2 { margin: 0; font-size: 16px; }
+      .row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+      #events li { cursor: pointer; padding: 2px 0; }
+      #events li:hover { text-decoration: underline; }
+      #context { flex: 1; min-height: 200px; font: 12px monospace; }
+      #chat { flex: 1; overflow: auto; border: 1px solid #ddd; padding: 8px; white-space: pre-wrap; }
+      .user { font-weight: bold; margin-top: 8px; }
+      .status { color: #666; font-size: 12px; }
+    </style>
+  </head>
+  <body>
+    <section>
+      <h2>1. Pick a Montandon event</h2>
+      <div class="row">
+        <select id="collection"></select>
+        <input id="from" type="date" /> – <input id="to" type="date" />
+        <input id="title" placeholder="filter title…" />
+        <button id="search">Search</button>
+      </div>
+      <form id="by-id" class="row">
+        <input id="item-id" style="flex: 1" placeholder="or load by id, e.g. gdacs-event-1104124-1" />
+        <button>Load</button>
+      </form>
+      <div id="data-status" class="status"></div>
+      <ul id="events"></ul>
+      <h2>Context sent to the model (editable)</h2>
+      <textarea id="context"></textarea>
+    </section>
+
+    <section>
+      <h2>2. Load a model and ask</h2>
+      <div class="row">
+        <select id="model"></select>
+        <button id="load">Load model</button>
+      </div>
+      <div id="model-status" class="status"></div>
+      <div id="chat"></div>
+      <form id="ask" class="row">
+        <input id="question" style="flex: 1" placeholder="How many people were affected?" disabled />
+        <button disabled>Ask</button>
+      </form>
+    </section>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
