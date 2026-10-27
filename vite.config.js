@@ -4,6 +4,9 @@ import { defineConfig, loadEnv } from "vite";
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   return {
+    base: "./",
+    // Only a yes/no flag reaches the bundle, never the token itself.
+    define: { __HAS_ENV_TOKEN__: JSON.stringify(mode === "development" && !!env.MONTANDON_TOKEN) },
     server: {
       proxy: {
         "/stac": {

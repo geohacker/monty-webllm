@@ -20,7 +20,21 @@
   </head>
   <body>
     <section>
-      <h2>1. Pick a Montandon event</h2>
+      <div class="row">
+        <h2>1. Pick a Montandon event</h2>
+        <button id="change-token" hidden>Change token</button>
+      </div>
+      <dialog id="token-dialog">
+        <form method="dialog" class="row" style="flex-direction: column; align-items: stretch">
+          <strong>Montandon API token</strong>
+          <span class="status">
+            Get one from IFRC GO → Account → External Connections → "Montandon - Global Crisis Data Bank".
+            It is stored only in this browser.
+          </span>
+          <input id="token" type="password" required autofocus style="min-width: 320px" />
+          <button>Save</button>
+        </form>
+      </dialog>
       <div class="row">
         <select id="collection"></select>
         <input id="from" type="date" /> – <input id="to" type="date" />

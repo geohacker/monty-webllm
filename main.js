@@ -4,10 +4,34 @@ const $ = (id) => document.getElementById(id);
 
 // ---------- Montandon (STAC) ----------
 
+// With MONTANDON_TOKEN in .env, the dev server proxies /stac and adds the token. Otherwise
+// (no .env token, or the static build) we call Montandon directly with a token the user enters.
+const USE_PROXY = __HAS_ENV_TOKEN__;
+const STAC_URL = USE_PROXY ? "/stac" : "https://montandon-eoapi.ifrc.org/stac";
+const tokenInput = $("token");
+try { tokenInput.value = localStorage.getItem("montandon-token") || ""; } catch {}
+
+const askForToken = () => $("token-dialog").showModal();
+$("token-dialog").onclose = () => {
+  try { localStorage.setItem("montandon-token", tokenInput.value.trim()); } catch {}
+  init();
+};
+$("change-token").hidden = USE_PROXY;
+$("change-token").onclick = askForToken;
+
+function init() {
+  loadCollections().catch((e) => {
+    $("data-status").textContent = `Montandon: ${e.message}`;
+    if (!USE_PROXY && /^40[13]/.test(e.message)) askForToken();
+  });
+}
+
 async function stac(path, body) {
-  const res = await fetch(`/stac${path}`, {
+  const headers = { "Content-Type": "application/json" };
+  if (!USE_PROXY) headers.Authorization = `Bearer ${tokenInput.value.trim()}`;
+  const res = await fetch(`${STAC_URL}${path}`, {
     method: body ? "POST" : "GET",
-    headers: { "Content-Type": "application/json" },
+    headers,
     body: body && JSON.stringify(body),
   });
   if (!res.ok) throw new Error(`${res.status} ${await res.text()}`);
@@ -186,4 +210,5 @@ $("by-id").onsubmit = (e) => {
   loadById($("item-id").value.trim()).catch((e) => ($("data-status").textContent = e.message));
 };
 $("search").onclick = () => searchEvents().catch((e) => ($("data-status").textContent = e.message));
-loadCollections().catch((e) => ($("data-status").textContent = `Montandon: ${e.message} (is MONTANDON_TOKEN set in .env?)`));
+if (!USE_PROXY && !tokenInput.value) askForToken();
+else init();
